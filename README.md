@@ -1,1 +1,1 @@
-react-class-base-components
+react-http-request
