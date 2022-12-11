@@ -20,11 +20,12 @@ function App() {
         throw new Error('error is here');
       }
       const data = await res.json();
-      const transMovies = data.results.map((movie) => ({
-        id: movie.episode_id,
+      console.log({ data })
+      const transMovies = Object.entries(data).map(([movieId, movie]) => ({
+        id: movieId,
         title: movie.title,
-        releaseDate: movie.opening_crawl,
-        openingText: movie.releas_date,
+        releaseDate: movie.openingText,
+        openingText: movie.releaseDate,
       }));
       setMovies(transMovies);
     } catch (e) {
@@ -48,8 +49,19 @@ function App() {
     content = <p>loading...</p>
   }
 
-  const addMovieHandler = (movie) => {
-    console.log({ movie })
+  const addMovieHandler = async (movie) => {
+    const response = await fetch(
+      'https://react-http-819ae-default-rtdb.firebaseio.com/movies.json',
+      {
+        method: 'POST',
+        body: JSON.stringify(movie),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      },
+    ).then();
+    const data = await response.json();
+    console.log(data);
   }
 
   return (
